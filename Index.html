@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Фонетическая академия Маруси Михайловны</title>
+<style>
+    :root{
+        --bg1:#050816;
+        --bg2:#101a3a;
+        --bg3:#2a0f4d;
+        --panel:rgba(12, 18, 40, 0.72);
+        --line:rgba(255,255,255,0.12);
+        --text:#f4f7ff;
+        --muted:#b7c0df;
+        --accent:#8b5cf6;
+        --accent2:#38bdf8;
+        --good:#22c55e;
+        --bad:#ef4444;
+        --warn:#f59e0b;
+        --glow: 0 0 24px rgba(139,92,246,.35);
+        --shadow: 0 24px 80px rgba(0,0,0,.45);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%}
+    body{
+        font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+        color:var(--text);
+        background:
+            radial-gradient(circle at 20% 20%, rgba(56,189,248,.20), transparent 18%),
+            radial-gradient(circle at 80% 15%, rgba(139,92,246,.22), transparent 20%),
+            radial-gradient(circle at 15% 80%, rgba(168,85,247,.15), transparent 18%),
+            radial-gradient(circle at 85% 85%, rgba(59,130,246,.12), transparent 17%),
+            linear-gradient(135deg, var(--bg1), var(--bg2) 52%, var(--bg3));
+        overflow-x:hidden;
+        padding:22px;
+    }
+
+    body::before,
+    body::after{
+        content:"";
+        position:fixed;
+        inset:0;
+        pointer-events:none;
+        z-index:0;
+    }
+
+    body::before{
+        background-image:
+            radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.95) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 28% 33%, rgba(255,255,255,.85) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 48% 12%, rgba(255,255,255,.92) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 61% 25%, rgba(255,255,255,.75) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 72% 16%, rgba(255,255,255,.96) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 84% 28%, rgba(255,255,255,.88) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 8% 58%, rgba(255,255,255,.80) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 21% 71%, rgba(255,255,255,.90) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 41% 63%, rgba(255,255,255,.72) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 58% 77%, rgba(255,255,255,.92) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 77% 68%, rgba(255,255,255,.80) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 92% 63%, rgba(255,255,255,.88) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 11% 86%, rgba(255,255,255,.80) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 35% 88%, rgba(255,255,255,.94) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 66% 90%, rgba(255,255,255,.78) 0 50%, transparent 52%),
+            radial-gradient(1px 1px at 88% 90%, rgba(255,255,255,.94) 0 50%, transparent 52%);
+        opacity:.65;
+        animation: twinkle 8s ease-in-out infinite alternate;
+    }
+
+    body::after{
+        background:
+            radial-gradient(circle at 30% 20%, rgba(139,92,246,.18), transparent 28%),
+            radial-gradient(circle at 70% 30%, rgba(56,189,248,.12), transparent 24%),
+            radial-gradient(circle at 55% 75%, rgba(168,85,247,.12), transparent 25%);
+        filter: blur(12px);
+        animation: drift 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle{
+        0%{opacity:.45; transform:scale(1)}
+        100%{opacity:.85; transform:scale(1.02)}
+    }
+    @keyframes drift{
+        0%{transform:translateY(0px) translateX(0px)}
+        100%{transform:translateY(18px) translateX(-8px)}
+    }
+
+    .app{
+        position:relative;
+        z-index:1;
+        max-width:1320px;
+        margin:0 auto;
+        display:grid;
+        grid-template-columns: 1fr 310px;
+        gap:18px;
+        align-items:start;
+    }
+
+    .main{
+        background:var(--panel);
+        backdrop-filter: blur(16px);
+        border:1px solid var(--line);
+        border-radius:28px;
+        box-shadow:var(--shadow);
+        overflow:hidden;
+    }
+
+    .sidebar{
+        position:sticky;
+        top:18px;
+        display:grid;
+        gap:14px;
+    }
+
+    .card{
+        background:rgba(255,255,255,.08);
+        backdrop-filter: blur(14px);
+        border:1px solid rgba(255,255,255,.12);
+        border-radius:24px;
+        box-shadow:var(--shadow);
+        padding:18px;
+    }
+
+    .hero{
+        padding:26px 26px 18px;
+        border-bottom:1px solid rgba(255,255,255,.08);
+        background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    }
+
+    .topline{
+        display:flex;
+        gap:12px;
+        align-items:center;
+        justify-content:space-between;
+        flex-wrap:wrap;
+        margin-bottom:12px;
+    }
+
+    .brand{
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+    }
+
+    h1{
+        margin:0;
+        font-size:clamp(30px, 4.4vw, 52px);
+        line-height:1.03;
+        letter-spacing:-0.04em;
+    }
+
+    .tagline{
+        color:var(--muted);
+        max-width:860px;
+        line-height:1.5;
+        font-size:15px;
+    }
+
+    .pill{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        padding:10px 14px;
+        border-radius:999px;
+        background:linear-gradient(135deg, rgba(139,92,246,.20), rgba(56,189,248,.16));
+        border:1px solid rgba(255,255,255,.12);
+        box-shadow:var(--glow);
+        font-weight:700;
+        white-space:nowrap;
+    }
+
+    .stage{
+        padding:18px 26px 22px;
+        display:grid;
+        grid-template-columns: 1.1fr .9fr;
+        gap:16px;
+        border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .levelcard,
+    .statuscard{
+        border-radius:24px;
+        background:rgba(255,255,255,.07);
+        border:1px solid rgba(255,255,255,.12);
+        padding:18px;
+    }
+
+    .levelname{
+        margin:0 0 10px;
+        font-size:18px;
+        color:#dfe6ff;
+    }
+
+    .word{
+        display:flex;
+        align-items:center;
+        flex-wrap:wrap;
+        gap:8px;
+        margin:10px 0 0;
+    }
+
+    .word span{
+        width:52px;
+        height:52px;
+        border-radius:16px;
+        display:grid;
+        place-items:center;
+        background:rgba(255,255,255,.09);
+        border:1px solid rgba(255,255,255,.12);
+        font-size:28px;
+        font-weight:900;
+        box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+
+    .wordnote{
+        margin:12px 0 0;
+        color:var(--muted);
+        line-height:1.45;
+        font-size:14px;
+    }
+
+    .statusline{
+        display:grid;
+        gap:10px;
+    }
+
+    .statuspill{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        padding:12px 14px;
+        border-radius:18px;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.10);
+        color:#ebefff;
+        font-size:14px;
+        font-weight:700;
+    }
+
+    .controls{
+        padding:18px 26px 22px;
+        display:grid;
+        grid-template-columns: auto auto auto auto 1fr;
+        gap:12px;
+        border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .btn{
+        border:none;
+        cursor:pointer;
+        border-radius:18px;
+        padding:14px 16px;
+        font-weight:800;
+        font-size:15px;
+        transition:transform .16s ease, opacity .16s ease, box-shadow .16s ease, filter .16s ease;
+        color:#fff;
+        box-shadow:0 12px 26px rgba(0,0,0,.22);
+        user-select:none;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(1px) scale(.99)}
+    .btn.primary{background:linear-gradient(135deg, #7c3aed, #2563eb)}
+    .btn.good{background:linear-gradient(135deg, #16a34a, #22c55e)}
+    .btn.warn{background:linear-gradient(135deg, #f59e0b, #f97316)}
+    .btn.ghost{
+        color:var(--text);
+        background:rgba(255,255,255,.09);
+        border:1px solid rgba(255,255,255,.12);
+    }
+    .btn:disabled{
+        opacity:.45;
+        cursor:not-allowed;
+        transform:none;
+        filter:saturate(.6);
+    }
+
+    .content{
+        padding:22px 26px 26px;
+    }
+
+    .legend{
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
+        margin-bottom:18px;
+    }
+
+    .legend .item{
+        padding:9px 12px;
+        border-radius:999px;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.10);
+        color:#d6dcf6;
+        font-size:13px;
+        font-weight:700;
+    }
+
+    .rows{
+        display:grid;
+        gap:14px;
+    }
+
+    .row{
+        display:grid;
+        grid-template-columns: 120px minmax(0,1fr);
+        gap:14px;
+        align-items:stretch;
+        padding:14px;
+        border-radius:24px;
+        background:rgba(255,255,255,.07);
+        border:1px solid rgba(255,255,255,.12);
+        transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+    }
+
+    .row.good-row{
+        border-color:rgba(34,197,94,.36);
+        box-shadow:0 0 0 1px rgba(34,197,94,.08), 0 14px 40px rgba(34,197,94,.08);
+    }
+    .row.bad-row{
+        border-color:rgba(239,68,68,.42);
+        box-shadow:0 0 0 1px rgba(239,68,68,.08), 0 14px 40px rgba(239,68,68,.08);
+    }
+
+    .letterbox{
+        min-height:104px;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        gap:6px;
+        border-radius:18px;
+        background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+        border:1px solid rgba(255,255,255,.14);
+    }
+
+    .letter{
+        font-size:42px;
+        font-weight:900;
+        line-height:1;
+        letter-spacing:-0.06em;
+        text-shadow:0 0 16px rgba(255,255,255,.10);
+    }
+
+    .kind{
+        font-size:12px;
+        text-transform:uppercase;
+        letter-spacing:.12em;
+        color:#d9def4;
+        font-weight:800;
+    }
+
+    .sound-note{
+        font-size:12px;
+        color:#b8c2e4;
+        text-align:center;
+        line-height:1.25;
+        padding:0 8px;
+    }
+
+    .chips{
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
+        align-content:flex-start;
+        padding:2px 0;
+    }
+
+    .chip{
+        border:none;
+        cursor:pointer;
+        border-radius:999px;
+        padding:11px 14px;
+        font-size:14px;
+        font-weight:800;
+        background:rgba(255,255,255,.09);
+        color:#e8edff;
+        border:1px solid rgba(255,255,255,.10);
+        transition:transform .14s ease, background .14s ease, box-shadow .14s ease, opacity .14s ease;
+    }
+    .chip:hover{transform:translateY(-1px)}
+    .chip.active{
+        background:linear-gradient(135deg, rgba(139,92,246,.95), rgba(56,189,248,.80));
+        box-shadow:0 10px 20px rgba(59,130,246,.22);
+        color:white;
+    }
+    .chip.base{
+        cursor:default;
+        background:rgba(34,197,94,.14);
+        color:#d9ffe6;
+        border-color:rgba(34,197,94,.16);
+    }
+    .chip.disabled{
+        opacity:.55;
+        cursor:not-allowed;
+        pointer-events:none;
+    }
+
+    .footer{
+        padding:0 26px 26px;
+    }
+
+    .actions{
+        display:grid;
+        grid-template-columns: 1fr auto auto auto;
+        gap:12px;
+        margin-top:18px;
+        align-items:start;
+    }
+
+    .small{
+        font-size:13px;
+        color:#c9d1ef;
+        line-height:1.55;
+        padding-top:6px;
+    }
+
+    .result{
+        margin-top:18px;
+        padding:18px;
+        border-radius:24px;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.12);
+        min-height:84px;
+        line-height:1.55;
+    }
+
+    .result h2{
+        margin:0 0 8px;
+        font-size:20px;
+    }
+
+    .ok{color:#86efac;font-weight:900}
+    .err{color:#fca5a5;font-weight:900}
+    .warn-text{color:#fde68a;font-weight:900}
+
+    .meter{
+        display:grid;
+        gap:10px;
+    }
+
+    .meter .label{
+        display:flex;
+        justify-content:space-between;
+        gap:10px;
+        color:#d8def6;
+        font-size:13px;
+        font-weight:700;
+    }
+
+    .bar{
+        height:12px;
+        border-radius:999px;
+        background:rgba(255,255,255,.08);
+        overflow:hidden;
+        border:1px solid rgba(255,255,255,.10);
+    }
+
+    .fill{
+        height:100%;
+        width:0%;
+        border-radius:999px;
+        background:linear-gradient(90deg, #22c55e, #38bdf8, #a855f7);
+        transition:width .5s ease;
+        box-shadow:0 0 20px rgba(56,189,248,.25);
+    }
+
+    .sideTitle{
+        margin:0 0 8px;
+        font-size:18px;
+    }
+
+    .sideText{
+        color:var(--muted);
+        font-size:14px;
+        line-height:1.5;
+        margin:0;
+    }
+
+    .badgeList{
+        display:grid;
+        gap:10px;
+        margin-top:12px;
+    }
+
+    .mini{
+        padding:12px;
+        border-radius:18px;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.10);
+        color:#ebefff;
+        font-size:14px;
+        line-height:1.45;
+    }
+
+    .quote{
+        font-style:italic;
+        color:#f6f7ff;
+        border-left:3px solid rgba(56,189,248,.75);
+        padding-left:12px;
+    }
+
+    .sparkles{
+        position:fixed;
+        inset:0;
+        pointer-events:none;
+        z-index:5;
+        overflow:hidden;
+    }
+
+    .sparkle{
+        position:absolute;
+        width:8px;
+        height:8px;
+        border-radius:50%;
+        background:radial-gradient(circle, #fff 0 35%, rgba(255,255,255,.0) 70%);
+        opacity:.9;
+        animation: pop 900ms ease-out forwards;
+        filter:drop-shadow(0 0 8px rgba(255,255,255,.8));
+    }
+
+    @keyframes pop{
+        0%{transform:translateY(0) scale(.8); opacity:.0}
+        15%{opacity:1}
+        100%{transform:translateY(-90px) translateX(var(--dx)) scale(1.6); opacity:0}
+    }
+
+    .hidden{display:none !important}
+
+    @media (max-width: 1100px){
+        .app{grid-template-columns:1fr}
+        .sidebar{
+            position:static;
+            grid-template-columns:repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 860px){
+        .controls{
+            grid-template-columns:1fr 1fr;
+        }
+        .controls .wordstamp{
+            grid-column:1 / -1;
+        }
+        .stage{
+            grid-template-columns:1fr;
+        }
+        .row{
+            grid-template-columns:1fr;
+        }
+        .letterbox{
+            min-height:auto;
+            flex-direction:row;
+            justify-content:flex-start;
+            gap:12px;
+            padding:12px 14px;
+        }
+        .letter{margin:0}
+        .sound-note{margin-left:auto;text-align:right}
+        .actions{
+            grid-template-columns:1fr;
+        }
+    }
+
+    @media (max-width: 620px){
+        body{padding:10px}
+        .main,.card{border-radius:22px}
+        .hero,.stage,.controls,.content,.footer{padding-left:14px;padding-right:14px}
+        .controls,.stage{padding-top:14px;padding-bottom:14px}
+        .btn{width:100%}
+        .sidebar{grid-template-columns:1fr}
+    }
+</style>
+</head>
+<body>
+<div class="sparkles" id="sparkles"></div>
+
+<div class="app">
+    <main class="main">
+        <section class="hero">
+            <div class="topline">
+                <div class="brand">
+                    <h1>Фонетическая академия Маруси Михайловны</h1>
+                    <div class="tagline">
+                        Пять космических уровней, пять заранее подготовленных слов и строгая проверка без сюрпризов с ударением.
+                    </div>
+                </div>
+                <div class="pill">🚀 Ты сила. Ты знание.</div>
+            </div>
+        </section>
+
+        <section class="stage">
+            <div class="levelcard">
+                <h2 class="levelname" id="levelName">Уровень</h2>
+                <div class="word" id="wordLine"></div>
+                <p class="wordnote" id="wordNote"></p>
+            </div>
+
+            <div class="statuscard">
+                <div class="statusline">
+                    <div class="statuspill"><span>Пройдено уровней</span><span id="passedCount">0 / 5</span></div>
+                    <div class="statuspill"><span>Серия без ошибок</span><span id="streakCount">0</span></div>
+                    <div class="statuspill"><span>Текущий титул</span><span id="rankName">Новичок</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="controls">
+            <button class="btn primary" id="checkBtn">Проверить</button>
+            <button class="btn good" id="nextBtn" disabled>Следующий уровень</button>
+            <button class="btn ghost" id="resetBtn">Сбросить выбор</button>
+            <button class="btn warn" id="resetProgressBtn">Сбросить прогресс</button>
+            <div class="wordstamp"></div>
+        </section>
+
+        <section class="content">
+            <div class="legend">
+                <div class="item">Синие чипы — выбираемые признаки</div>
+                <div class="item">Зелёная рамка — всё правильно</div>
+                <div class="item">Красная рамка — есть ошибка или пропуск</div>
+            </div>
+
+            <div id="rows" class="rows"></div>
+        </section>
+
+        <section class="footer">
+            <div class="actions">
+                <div class="small" id="helpText">
+                    Подсказка: здесь нет произвольного ввода. Каждый уровень фиксирован, поэтому ударение и безударность не ломаются.
+                    После успешной проверки откроется следующий уровень.
+                </div>
+                <button class="btn good" id="checkBtn2">Проверить</button>
+                <button class="btn ghost" id="resetSelectionsBtn">Сбросить выбор</button>
+                <button class="btn primary" id="jumpBtn" disabled>К следующему слову</button>
+            </div>
+
+            <div id="result" class="result">
+                <h2>Готово к работе</h2>
+                <div style="color:#c9d1ef">Запускается первый уровень.</div>
+            </div>
+        </section>
+    </main>
+
+    <aside class="sidebar">
+        <div class="card">
+            <h3 class="sideTitle">💊 Напоминание</h3>
+            <p class="sideText">Перед колледжем<br />не забудь выпить магний.</p>
+        </div>
+
+        <div class="card">
+            <h3 class="sideTitle">🌌 Космический прогресс</h3>
+            <div class="meter">
+                <div class="label">
+                    <span>Правильные проверки</span>
+                    <span id="progressLabel">0</span>
+                </div>
+                <div class="bar"><div class="fill" id="progressFill"></div></div>
+            </div>
+            <div class="badgeList" id="rankBox"></div>
+        </div>
+
+        <div class="card">
+            <h3 class="sideTitle">✨ Фраза дня</h3>
+            <p class="sideText quote" id="quoteBox">Слово ещё не проверено. Но уже выглядит серьёзно.</p>
+        </div>
+    </aside>
+</div>
+
+<script>
+(() => {
+    const LEVELS = [
+        {
+            name: 'Уровень 1 · Маруся',
+            word: 'Маруся',
+            note: 'Начинаем с мягкого входа. Ударение здесь на У: Мару́ся.',
+            message: 'Маруся Михайловна видит хороший старт.',
+            letters: [
+                { sym: 'М', kind: 'consonant', voice: 'voiced', pair: 'unpaired' },
+                { sym: 'А', kind: 'vowel', stress: 'unstressed' },
+                { sym: 'Р', kind: 'consonant', voice: 'voiced', pair: 'unpaired' },
+                { sym: 'У', kind: 'vowel', stress: 'stressed' },
+                { sym: 'С', kind: 'consonant', voice: 'voiceless', pair: 'paired' },
+                { sym: 'Я', kind: 'vowel', stress: 'unstressed' },
+            ]
+        },
+        {
+            name: 'Уровень 2 · Контингент',
+            word: 'Контингент',
+            note: 'Тут слово длиннее. Ударение на Е: континге́нт.',
+            message: 'Контингент покорён. Отличная собранность.',
+            letters: [
+                { sym: 'К', kind: 'consonant', voice: 'voiceless', pair: 'paired' },
+                { sym: 'О', kind: 'vowel', stress: 'unstressed' },
+                { sym: 'Н', kind: 'consonant', voice: 'voiced', pair: 'unpaired' },
+                { sym: 'Т', kind: 'consonant', voice: 'voiceless', pair: 'paired' },
+                { sym: 'И', kind: 'vowel', stress: 'unstressed' },
+                { sym: 'Н', kind: 'consonant', voice: 'voiced', pair: 'unpaired' },
+                { sym: 'Г', kind: 'consonant', voice: 'voiced', pair: 'paired' },
+                { sym: 'Е', kind: 'vowel', stress: 'stressed' },
+                { sym: 'Н', kind: 'consonant', voice: 'voiced', pair: 'unpaired' },
+                { sym: 'Т', kind: 'consonant', voice: 'voiceless', pair: 'paired' },
+            ]
+        },
+        {
+            name: 'Уровень 3 · Берёза',
+            word: 'Берёза',
+            note: 'Буква Ё всегда ударная: берё́за.',
+            message: 'Берёза сияет. Ударение поймано точно.',
+            letters: [
+                { sym: 'Б', kind: 'consonant', voice: 'voiced', pair: 'paired' },
+                { sym: 'Е', kind: 'vowel', stress: 'unstressed' },
+                { sym: 'Р', kind: 'consonant', voice: 'voiced', pair: 'unpaired' },
+                { sym: 'Ё', kind: 'vowel', stress: 'stressed' },
+                { sym: 'З', kind: 'consonant', voice: 'voiced', pair: 'paired' },
+                { sym: 'А', kind: 'vowel', stress: 'unstressed' },
+            ]
+        },
+        {
+            name: 'Уровень 4 · Учитель',
+            word: 'Учитель',
+            note: 'Ударение на И: учи́тель. Мягкий знак звука не даёт.',
+            message: 'Учитель принят в орбиту знаний.',
+            letters: [
+                { sym: 'У', kind: 'vowel', stress: 'unstressed' },
+                { sym: 'Ч', kind: 'consonant', voice: 'voiceless', pair: 'unpaired' },
+                { sym: 'И', kind: 'vowel', stress: 'stressed' },
+                { sym: 'Т', kind: 'consonant', voice: 'voiceless', pair: 'paired' },
+                { sym: 'Е', kind: 'vowel', stress: 'unstressed' },
+                { sym: 'Л', kind: 'consonant', voice: 'voiced', pair: 'unpaired' },
+                { sym: 'Ь', kind: 'sign' },
+            ]
+        },
+        {
+            name: 'Уровень 5 · Самолёт',
+            word: 'Самолёт',
+            note: 'Ударение на Ё: самолёт. Финальный космический экзамен.',
+            message: 'Самолёт взлетел. Последний уровень взят.',
+            letters: [
+                { sym: 'С', kind: 'consonant', voice: 'voiceless', pair: 'paired' },
+                { sym: 'А', kind: 'vowel', stress: 'unstressed' },
+                { sym: 'М', kind: 'consonant', voice: 'voiced', pair: 'unpaired' },
+                { sym: 'О', kind: 'vowel', stress: 'unstressed' },
+                { sym: 'Л', kind: 'consonant', voice: 'voiced', pair: 'unpaired' },
+                { sym: 'Ё', kind: 'vowel', stress: 'stressed' },
+                { sym: 'Т', kind: 'consonant', voice: 'voiceless', pair: 'paired' },
+            ]
+        }
+    ];
+
+    const RANKS = [
+        '🌑 Новичок фонетики',
+        '🛰 Исследователь звуков',
+        '🌙 Лунный лингвист',
+        '⭐ Звёздный фонетист',
+        '🚀 Магистр Маруси Михайловны',
+    ];
+
+    const SUCCESS_QUOTES = [
+        'Ты сила. Ты знание.',
+        'Отлично. Маруса Михайловна одобряет.',
+        'Вот это фонетика. Космос, а не ошибка.',
+        'Зачёт уверенно летит к тебе.',
+        'Слово разобрано красиво и по делу.',
+        'Сегодня фонетика проиграла, а ты победил.',
+        'Маршрут к колледжу стал чуть ближе.',
+        'Сияюще. Точно. Умно.'
+    ];
+
+    const PERFECT_QUOTES = [
+        '🌌 Космический зачёт! Всё чисто.',
+        '🚀 Идеальная работа. Маруса Михайловна гордится.',
+        '⭐ Пять уровней подряд — уровень звёздного фонетиста.',
+        '✨ Слово за словом, и ты уже в орбите знаний.'
+    ];
+
+    const rowsEl = document.getElementById('rows');
+    const resultEl = document.getElementById('result');
+    const wordLineEl = document.getElementById('wordLine');
+    const wordNoteEl = document.getElementById('wordNote');
+    const levelNameEl = document.getElementById('levelName');
+    const quoteBox = document.getElementById('quoteBox');
+    const progressLabel = document.getElementById('progressLabel');
+    const progressFill = document.getElementById('progressFill');
+    const rankBox = document.getElementById('rankBox');
+    const passedCountEl = document.getElementById('passedCount');
+    const streakCountEl = document.getElementById('streakCount');
+    const sparkles = document.getElementById('sparkles');
+    const checkBtn = document.getElementById('checkBtn');
+    const checkBtn2 = document.getElementById('checkBtn2');
+    const resetBtn = document.getElementById('resetBtn');
+    const resetSelectionsBtn = document.getElementById('resetSelectionsBtn');
+    const resetProgressBtn = document.getElementById('resetProgressBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const jumpBtn = document.getElementById('jumpBtn');
+    const helpText = document.getElementById('helpText');
+
+    const STORAGE_KEY = 'marusya_space_trainer_v1';
+
+    const state = loadState();
+    let currentLevel = clampLevel(state.currentLevel || 0);
+    let correctChecks = state.correctChecks || 0;
+    let streak = state.streak || 0;
+    let passed = new Set(state.passed || []);
+    let completedCurrent = false;
+
+    function clampLevel(i){
+        if (!Number.isFinite(i)) return 0;
+        return Math.max(0, Math.min(LEVELS.length - 1, i|0));
+    }
+
+    function loadState(){
+        try{
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if(!raw) return { currentLevel:0, correctChecks:0, streak:0, passed:[] };
+            const parsed = JSON.parse(raw);
+            return {
+                currentLevel: Number(parsed.currentLevel || 0),
+                correctChecks: Number(parsed.correctChecks || 0),
+                streak: Number(parsed.streak || 0),
+                passed: Array.isArray(parsed.passed) ? parsed.passed : []
+            };
+        }catch(e){
+            return { currentLevel:0, correctChecks:0, streak:0, passed:[] };
+        }
+    }
+
+    function saveState(){
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            currentLevel,
+            correctChecks,
+            streak,
+            passed: [...passed]
+        }));
+    }
+
+    function normalizeLevelIndex(i){
+        if (passed.has(i)) return true;
+        return false;
+    }
+
+    function renderWord(lineWord){
+        wordLineEl.innerHTML = '';
+        [...lineWord].forEach(ch => {
+            const s = document.createElement('span');
+            s.textContent = ch;
+            wordLineEl.appendChild(s);
+        });
+    }
+
+    function chip(label, group, extraClass=''){
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `chip ${extraClass}`.trim();
+        btn.textContent = label;
+        if(group) btn.dataset.group = group;
+        btn.addEventListener('click', () => toggleChip(btn));
+        return btn;
+    }
+
+    function toggleChip(btn){
+        if(btn.classList.contains('disabled')) return;
+        const row = btn.closest('.row');
+        if(!row) return;
+        const group = btn.dataset.group;
+        if(!group) return;
+        const groupButtons = row.querySelectorAll(`.chip[data-group="${group}"]`);
+        const willActivate = !btn.classList.contains('active');
+        groupButtons.forEach(b => b.classList.remove('active'));
+        if(willActivate) btn.classList.add('active');
+    }
+
+    function kindTitle(kind){
+        if(kind === 'vowel') return 'гласная';
+        if(kind === 'consonant') return 'согласная';
+        return 'знак';
+    }
+
+    function noteForSymbol(kind){
+        if(kind === 'sign') return 'звука нет';
+        if(kind === 'vowel') return 'выбирай один признак ударности';
+        return 'выбирай 2 признака';
+    }
+
+    function createRow(item, index){
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.dataset.index = String(index);
+        row.dataset.kind = item.kind;
+        row.dataset.sym = item.sym;
+
+        const left = document.createElement('div');
+        left.className = 'letterbox';
+
+        const letter = document.createElement('div');
+        letter.className = 'letter';
+        letter.textContent = item.sym;
+
+        const kind = document.createElement('div');
+        kind.className = 'kind';
+        kind.textContent = kindTitle(item.kind);
+
+        const note = document.createElement('div');
+        note.className = 'sound-note';
+        note.textContent = noteForSymbol(item.kind);
+
+        left.appendChild(letter);
+        left.appendChild(kind);
+        left.appendChild(note);
+
+        const chipsWrap = document.createElement('div');
+        chipsWrap.className = 'chips';
+
+        const base = chip(item.kind === 'vowel' ? 'гласный' : item.kind === 'consonant' ? 'согласный' : 'знак', null, 'base');
+        base.tabIndex = -1;
+        chipsWrap.appendChild(base);
+
+        if(item.kind === 'vowel'){
+            chipsWrap.appendChild(chip('ударный', 'stress'));
+            chipsWrap.appendChild(chip('безударный', 'stress'));
+        }else if(item.kind === 'consonant'){
+            chipsWrap.appendChild(chip('звонкий', 'voice'));
+            chipsWrap.appendChild(chip('глухой', 'voice'));
+            chipsWrap.appendChild(chip('парный', 'pair'));
+            chipsWrap.appendChild(chip('непарный', 'pair'));
+        }else{
+            const info = document.createElement('div');
+            info.className = 'chip disabled';
+            info.textContent = 'звука нет';
+            chipsWrap.appendChild(info);
+        }
+
+        row.appendChild(left);
+        row.appendChild(chipsWrap);
+        return row;
+    }
+
+    function renderLevel(index){
+        currentLevel = clampLevel(index);
+        completedCurrent = passed.has(currentLevel);
+        const level = LEVELS[currentLevel];
+
+        levelNameEl.textContent = level.name;
+        wordNoteEl.textContent = level.note;
+        renderWord(level.word);
+
+        rowsEl.innerHTML = '';
+        level.letters.forEach((item, idx) => rowsEl.appendChild(createRow(item, idx)));
+
+        if (completedCurrent) {
+            helpText.textContent = 'Этот уровень уже пройден. Можно проходить следующий или повторить этот.';
+        } else {
+            helpText.textContent = 'Подсказка: здесь нет произвольного ввода. Каждый уровень фиксирован, поэтому ударение и безударность не ломаются.';
+        }
+
+        nextBtn.disabled = !completedCurrent || currentLevel >= LEVELS.length - 1;
+        jumpBtn.disabled = !completedCurrent || currentLevel >= LEVELS.length - 1;
+
+        resultEl.innerHTML = completedCurrent
+            ? `<h2><span class="ok">Уровень уже пройден</span></h2><div style="color:#c9d1ef">Можно перейти дальше или проверить заново.</div>`
+            : `<h2>Готов к проверке</h2><div style="color:#c9d1ef">Отметь признаки и нажми «Проверить».</div>`;
+
+        updateUI();
+        saveState();
+    }
+
+    function clearSelections(){
+        document.querySelectorAll('.chip.active').forEach(chip => chip.classList.remove('active'));
+        document.querySelectorAll('.row').forEach(row => row.classList.remove('good-row', 'bad-row'));
+        completedCurrent = false;
+        if (passed.has(currentLevel)) {
+            nextBtn.disabled = false;
+            jumpBtn.disabled = false;
+        }
+        resultEl.innerHTML = `
+            <h2>Выбор сброшен</h2>
+            <div style="color:#c9d1ef">Можно отмечать признаки заново.</div>
+        `;
+    }
+
+    function resetAll(){
+        localStorage.removeItem(STORAGE_KEY);
+        currentLevel = 0;
+        correctChecks = 0;
+        streak = 0;
+        passed = new Set();
+        completedCurrent = false;
+        renderLevel(0);
+        quoteBox.textContent = 'Слово ещё не проверено. Но уже выглядит серьёзно.';
+        updateUI();
+    }
+
+    function compareRow(row, expected){
+        const kind = expected.kind;
+        const errors = [];
+
+        if(kind === 'sign') return errors;
+
+        if(kind === 'vowel'){
+            const selected = row.querySelector('.chip.active[data-group="stress"]');
+            if(!selected){
+                errors.push('не выбран ударный/безударный');
+            }else{
+                const ok = selected.textContent.trim() === (expected.stress === 'stressed' ? 'ударный' : 'безударный');
+                if(!ok) errors.push(`должна быть ${expected.stress === 'stressed' ? 'ударной' : 'безударной'}`);
+            }
+        }else if(kind === 'consonant'){
+            const voice = row.querySelector('.chip.active[data-group="voice"]');
+            const pair = row.querySelector('.chip.active[data-group="pair"]');
+            if(!voice) errors.push('не выбран звонкий/глухой');
+            if(!pair) errors.push('не выбран парный/непарный');
+
+            if(voice){
+                const okVoice = voice.textContent.trim() === (expected.voice === 'voiced' ? 'звонкий' : 'глухой');
+                if(!okVoice) errors.push(`должна быть ${expected.voice === 'voiced' ? 'звонкой' : 'глухой'}`);
+            }
+            if(pair){
+                const okPair = pair.textContent.trim() === (expected.pair === 'paired' ? 'парный' : 'непарный');
+                if(!okPair) errors.push(`должна быть ${expected.pair === 'paired' ? 'парной' : 'непарной'}`);
+            }
+        }
+
+        return errors;
+    }
+
+    function sparkleBurst(){
+        const colors = ['#ffffff', '#a78bfa', '#38bdf8', '#86efac', '#facc15'];
+        for(let i=0;i<18;i++){
+            const s = document.createElement('span');
+            s.className = 'sparkle';
+            s.style.left = `${50 + (Math.random() * 20 - 10)}%`;
+            s.style.top = `${68 + (Math.random() * 12 - 6)}%`;
+            s.style.background = `radial-gradient(circle, ${colors[i % colors.length]} 0 35%, rgba(255,255,255,0) 70%)`;
+            s.style.setProperty('--dx', `${(Math.random() * 120 - 60)}px`);
+            s.style.animationDelay = `${Math.random() * 80}ms`;
+            s.style.width = `${6 + Math.random() * 8}px`;
+            s.style.height = s.style.width;
+            sparkles.appendChild(s);
+            setTimeout(() => s.remove(), 1100);
+        }
+    }
+
+    function randomQuote(perfect=false){
+        const arr = perfect ? PERFECT_QUOTES : SUCCESS_QUOTES;
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function updateUI(){
+        passedCountEl.textContent = `${passed.size} / ${LEVELS.length}`;
+        streakCountEl.textContent = String(streak);
+        progressLabel.textContent = String(correctChecks);
+        progressFill.style.width = `${Math.min(100, (passed.size / LEVELS.length) * 100)}%`;
+
+        const rankIndex = Math.min(RANKS.length - 1, Math.floor(passed.size / 1.25));
+        rankBox.innerHTML = `
+            <div class="mini">${RANKS[rankIndex]}</div>
+            <div class="mini">Пройдено: <strong>${passed.size}</strong> из ${LEVELS.length}</div>
+        `;
+
+        const level = LEVELS[currentLevel];
+        const unlocked = passed.has(currentLevel) || currentLevel === 0 || passed.has(currentLevel - 1);
+        const titleRank = RANKS[Math.min(RANKS.length - 1, passed.size)];
+        document.getElementById('rankName').textContent = titleRank.split(' ').slice(1).join(' ') || titleRank;
+        checkBtn.disabled = completedCurrent && currentLevel >= LEVELS.length - 1;
+        checkBtn2.disabled = checkBtn.disabled;
+        nextBtn.disabled = !passed.has(currentLevel) || currentLevel >= LEVELS.length - 1;
+        jumpBtn.disabled = nextBtn.disabled;
+        saveState();
+    }
+
+    function advanceLevel(){
+        if(currentLevel < LEVELS.length - 1){
+            renderLevel(currentLevel + 1);
+        }else{
+            resultEl.innerHTML = `
+                <h2><span class="ok">Это был последний уровень</span></h2>
+                <div>🚀 Ты прошла все уровни академии.</div>
+                <div style="margin-top:8px">Ты сила. Ты знание.</div>
+                <div style="margin-top:8px">💊 И да, перед колледжем не забудь выпить магний.</div>
+            `;
+            quoteBox.textContent = 'Финальный космический зачёт.';
+            nextBtn.disabled = true;
+            jumpBtn.disabled = true;
+        }
+    }
+
+    function checkCurrent(){
+        const level = LEVELS[currentLevel];
+        const rows = [...document.querySelectorAll('.row')];
+        if(!rows.length) return;
+
+        const issues = [];
+        let filled = 0;
+
+        rows.forEach((row, idx) => {
+            row.classList.remove('good-row', 'bad-row');
+            const expected = level.letters[idx];
+            const rowIssues = compareRow(row, expected);
+
+            if(rowIssues.length){
+                if(expected.kind === 'sign'){
+                    row.classList.add('good-row');
+                }else{
+                    row.classList.add('bad-row');
+                    issues.push(`${expected.sym}: ${rowIssues.join(', ')}`);
+                }
+            }else{
+                row.classList.add('good-row');
+                if(expected.kind !== 'sign') filled++;
+            }
+        });
+
+        if(issues.length){
+            streak = 0;
+            const preview = issues.slice(0, 6).map(x => `• ${x}`).join('<br>');
+            const more = issues.length > 6 ? `<div class="small">И ещё ${issues.length - 6} пункт(ов).</div>` : '';
+            resultEl.innerHTML = `
+                <h2><span class="err">Есть ошибки</span></h2>
+                <div><strong>Правильных строк:</strong> ${filled} из ${level.letters.filter(x => x.kind !== 'sign').length}</div>
+                <div style="margin-top:10px;color:#ffe4e6">${preview}</div>
+                ${more}
+                <div class="small">Серия сброшена. Ничего страшного — космос любит повторную попытку.</div>
+            `;
+            quoteBox.textContent = 'Ничего страшного. Космос любит вторые попытки.';
+            completedCurrent = false;
+            nextBtn.disabled = true;
+            jumpBtn.disabled = true;
+        }else{
+            correctChecks += 1;
+            streak += 1;
+            passed.add(currentLevel);
+            completedCurrent = true;
+            updateUI();
+            sparkleBurst();
+
+            const perfect = passed.size >= LEVELS.length;
+            const quote = randomQuote(perfect);
+
+            if(perfect){
+                resultEl.innerHTML = `
+                    <h2><span class="ok">${quote}</span></h2>
+                    <div><strong>Все уровни пройдены:</strong> ${passed.size} из ${LEVELS.length}</div>
+                    <div style="margin-top:8px">✨ Маруса Михайловна передаёт космический зачёт.</div>
+                    <div style="margin-top:10px">💊 Перед колледжем не забудь выпить магний.</div>
+                `;
+                quoteBox.textContent = 'Финал пройден. Магистр Маруси Михайловны.';
+            }else{
+                resultEl.innerHTML = `
+                    <h2><span class="ok">Уровень пройден</span></h2>
+                    <div><strong>${level.message}</strong></div>
+                    <div style="margin-top:8px">${quote}</div>
+                    <div style="margin-top:10px">💊 Не забудь выпить магний перед колледжем.</div>
+                    <div style="margin-top:10px">Нажми «Следующий уровень».</div>
+                `;
+                quoteBox.textContent = quote;
+            }
+
+            passedCountEl.textContent = `${passed.size} / ${LEVELS.length}`;
+            streakCountEl.textContent = String(streak);
+            progressLabel.textContent = String(correctChecks);
+            progressFill.style.width = `${Math.min(100, (passed.size / LEVELS.length) * 100)}%`;
+            nextBtn.disabled = currentLevel >= LEVELS.length - 1;
+            jumpBtn.disabled = currentLevel >= LEVELS.length - 1;
+            saveState();
+        }
+
+        updateUI();
+    }
+
+    function restoreLastUnlocked(){
+        let idx = 0;
+        for(let i = 0; i < LEVELS.length; i++){
+            if(!passed.has(i)){
+                idx = i;
+                break;
+            }
+            idx = Math.min(i + 1, LEVELS.length - 1);
+        }
+        currentLevel = clampLevel(Math.min(idx, LEVELS.length - 1));
+        renderLevel(currentLevel);
+    }
+
+    document.getElementById('checkBtn').addEventListener('click', checkCurrent);
+    document.getElementById('checkBtn2').addEventListener('click', checkCurrent);
+    resetBtn.addEventListener('click', clearSelections);
+    resetSelectionsBtn.addEventListener('click', clearSelections);
+    resetProgressBtn.addEventListener('click', resetAll);
+    nextBtn.addEventListener('click', advanceLevel);
+    jumpBtn.addEventListener('click', advanceLevel);
+
+    updateUI();
+    restoreLastUnlocked();
+})();
+</script>
+</body>
+</html>
